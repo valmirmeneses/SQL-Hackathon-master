@@ -114,7 +114,7 @@ if (!($notPresent)) {New-AzResourceGroup -Name $TeamRG -Location $Location}
 # Setup Network and Storage account
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating Virtual Network................................................."
-$TemplateUri = "https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Network%20-%20v2.json"
+$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Network%20-%20v2.json"
 New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "NetworkBuild" 
 
 # Check if Vnet has been created
@@ -145,7 +145,7 @@ $JsonSASURI = $SASUri | ConvertTo-Json
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating legacySQL Server................................................."
 
-#$TemplateUri = "https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20LegacySQL-%20v2.json"
+#$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20LegacySQL-%20v2.json"
 $TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - LegacySQL- v2.json"
 New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -adminPassword $adminPassword -Name "LegacySQLBuild" -AsJob 
 
@@ -153,7 +153,7 @@ New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $Templat
 # Setup Data Migration Service, Gateway, Keyvault
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating DMS, Datafactory, Keyvault, storage account shared resources.................................................."
-$TemplateUri = "https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Shared%20-%20v2.json"
+$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Shared%20-%20v2.json"
 
 New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "SharedServicesBuild" -AsJob 
 
@@ -169,7 +169,7 @@ if ($notPresent) {Write-Warning "sqlhack-keyvault Failed to build. Please check 
 # Setup Team VM's
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating $TeamVMCount Team Server(s).................................................."
-#$TemplateUri = "https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Jump%20Servers%20-%20v2.json"
+#$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Jump%20Servers%20-%20v2.json"
 $TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Jump Servers - v2.json"
 
 New-AzResourceGroupDeployment -ResourceGroupName $TeamRG -TemplateUri $TemplateUri -Name "TeamVMBuild" -vmCount $TeamVMCount -SharedResourceGroup $SharedRG -SASURIKey $JsonSASURI -StorageAccount $StorageAccount -adminPassword $adminpassword -adminUsername $adminUsername -AsJob 
@@ -179,7 +179,7 @@ New-AzResourceGroupDeployment -ResourceGroupName $TeamRG -TemplateUri $TemplateU
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi Managed Instance................................................."
 
-#$TemplateUri = "https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Managed%20Instance-%20v2.json"
+#$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Managed%20Instance-%20v2.json"
 $TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
 New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -Name "ManagedInstanceBuild" -AsJob
 
