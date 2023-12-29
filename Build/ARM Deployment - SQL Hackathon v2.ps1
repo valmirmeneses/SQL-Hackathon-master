@@ -18,12 +18,12 @@ Get-AzSubscription -TenantId 345ff19a-728a-4c30-b146-d7bc44087fc4
 
 #2.3 Replace <Tenant ID> and <Subscription ID> placeholders below then run: 
 Select-AzSubscription -Tenant '345ff19a-728a-4c30-b146-d7bc44087fc4' -SubscriptionId '1479657d-52da-420f-8add-add930152216'
+Select-AzSubscription -Tenant '345ff19a-728a-4c30-b146-d7bc44087fc4' -SubscriptionId '1479657d-52da-420f-8add-add930152216'
 
 #NOW RUN THE ENTIRE PS SCRIPT COMPLETING REQUESTED PARAMTERS AS PROMPTED.
 # DemoUser
 # Demo@pass1234567
 #>
-Select-AzSubscription -Tenant '345ff19a-728a-4c30-b146-d7bc44087fc4' -SubscriptionId '1479657d-52da-420f-8add-add930152216'
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "#################################################################################"
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "SQL Server Migration Hack Build Script"
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "This script will build the enviroment for the SQL Server Hack and Labs"
