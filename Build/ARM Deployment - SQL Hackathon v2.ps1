@@ -179,9 +179,9 @@ New-AzResourceGroupDeployment -ResourceGroupName $TeamRG -TemplateUri $TemplateU
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi Managed Instance................................................."
 
-#$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Managed%20Instance-%20v2.json"
-$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -Name "ManagedInstanceBuild" -AsJob
+$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Free%20Managed%20Instance-template.json"
+#$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
+New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -adminPassword $adminPassword -Name "ManagedInstanceBuild" -AsJob
 
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Enviroment Build in progress. Please check RG deployments for errors."
 
