@@ -155,7 +155,7 @@ Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi M
 
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Free%20Managed%20Instance-template.json"
 #$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -adminPassword $adminPassword -Name "ManagedInstanceBuild" -AsJob
+New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri  -Name "ManagedInstanceBuild" -AsJob
 
 ###################################################################
 # Setup Data Migration Service, Gateway, Keyvault
