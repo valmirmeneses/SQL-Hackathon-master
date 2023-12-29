@@ -1,0 +1,119 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "managedInstanceName": {
+            "value": "sqlhackmi"
+        },
+        "skuName": {
+            "value": "GP_Gen5"
+        },
+        "skuEdition": {
+            "value": "GeneralPurpose"
+        },
+        "storageSizeInGB": {
+            "value": 64
+        },
+        "vCores": {
+            "value": 8
+        },
+        "licenseType": {
+            "value": "LicenseIncluded"
+        },
+        "hybridSecondaryUsage": {
+            "value": "Active"
+        },
+        "hardwareFamily": {
+            "value": "Gen5"
+        },
+        "dnsZonePartner": {
+            "value": ""
+        },
+        "collation": {
+            "value": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "proxyOverride": {
+            "value": "Proxy"
+        },
+        "minimalTlsVersion": {
+            "value": "1.2"
+        },
+        "publicDataEndpointEnabled": {
+            "value": true
+        },
+        "timezoneId": {
+            "value": "UTC"
+        },
+        "nsgForPublicEndpoint": {
+            "value": "allowFromInternetTo3342NSG"
+        },
+        "managedInstanceTags": {
+            "value": {}
+        },
+        "requestedBackupStorageRedundancy": {
+            "value": "Geo"
+        },
+        "zoneRedundant": {
+            "value": false
+        },
+        "deployInExistingSubnet": {
+            "value": true
+        },
+        "virtualNetworkResourceGroupName": {
+            "value": "SQLHACK-SHARED"
+        },
+        "virtualNetworkName": {
+            "value": "SQLHACK-SHARED-vnet"
+        },
+        "subnetName": {
+            "value": "ManagedInstance"
+        },
+        "enableADS": {
+            "value": true
+        },
+        "enableVA": {
+            "value": true
+        },
+        "pricingModel": {
+            "value": "Freemium"
+        },
+        "identity": {
+            "value": {
+                "type": "SystemAssigned"
+            }
+        },
+        "primaryUserAssignedIdentityId": {
+            "value": ""
+        },
+        "federatedClientId": {
+            "value": ""
+        },
+        "servicePrincipal": {
+            "value": {
+                "type": "None"
+            }
+        },
+        "maintenanceConfigurationId": {
+            "value": "/subscriptions/1479657d-52da-420f-8add-add930152216/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default"
+        },
+        "administratorLogin": {
+            "value": "Demouser"
+        },
+        "administratorLoginPassword": {
+            "value": "Demo@pass1234567"
+        },
+        "adminUsername": {
+            "defaultValue": "DemoUser",
+            "type": "string",
+            "metadata": {
+                "description": "Administrator user name for logging into the virtual machine and SQL MI."
+            }
+        },
+        "adminPassword": {
+            "value": "Demo@pass1234567"
+        }
+    }
+}

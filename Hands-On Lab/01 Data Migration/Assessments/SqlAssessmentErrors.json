@@ -1,0 +1,168 @@
+
+{
+    "DatabaseAssessments": [
+    {
+        "ServerName": "LEGACYSQL2008",
+        "DatabaseName": "TEAM01_TenantDataDb",
+        "DatabaseRestoreFails": false,
+        "FeatureId": "ClrAssemblies",
+        "IssueCategory": "Issue",
+        "ImpactedObjects": [
+        {
+            "Name": "CLRUFDS",
+            "ObjectType": "SqlAssembly",
+            "ImpactDetail": "Assembly 'CLRUFDS' has assembly file 'CLRUFDS'. CLR name: 'clrufds, version=0.0.0.0, culture=neutral, publickeytoken=null, processorarchitecture=msil'.",
+            "DatabaseObjectType": "SqlAssembly"
+        },
+        {
+            "Name": "CLRUFDS",
+            "ObjectType": "SqlAssembly",
+            "ImpactDetail": "Assembly 'CLRUFDS' has assembly file 'CLRUFDS.pdb'. CLR name: 'clrufds, version=0.0.0.0, culture=neutral, publickeytoken=null, processorarchitecture=msil'.",
+            "DatabaseObjectType": "SqlAssembly"
+        },
+        {
+            "Name": "Database1",
+            "ObjectType": "SqlAssembly",
+            "ImpactDetail": "Assembly 'Database1' has assembly file 'Database1'. CLR name: 'database1, version=0.0.0.0, culture=neutral, publickeytoken=null, processorarchitecture=msil'.",
+            "DatabaseObjectType": "SqlAssembly"
+        },
+        {
+            "Name": "Database1",
+            "ObjectType": "SqlAssembly",
+            "ImpactDetail": "Assembly 'Database1' has assembly file 'Database1.pdb'. CLR name: 'database1, version=0.0.0.0, culture=neutral, publickeytoken=null, processorarchitecture=msil'.",
+            "DatabaseObjectType": "SqlAssembly"
+        }
+        ],
+        "MoreInformation": "Un supported Transact-SQL in Azure SQL Database",
+        "RuleMetadata": {
+        "Description": "Azure SQL Database does not support SQL CLR assemblies.",
+        "Id": "SQL CLR assemblies are not supported in Azure SQL Database",
+        "HelpLink": "https://docs.microsoft.com/en-us/azure/azure-sql/database/transact-sql-tsql-differences-sql-server#transact-sql-syntax-not-supported-in-azure-sql-database",
+        "Probes": [],
+        "Enabled": true,
+        "Level": 2,
+        "Tags": [],
+        "Message": "Currently, there is no way to achieve this in Azure SQL Database. The recommended alternative solutions will require application code and database changes to use only assemblies supported by Azure SQL Database. Alternatively migrate to Azure SQL Managed Instance or SQL Server on Azure Virtual Machine.",
+        "Parameters": {}
+        },
+        "RuleScope": "Database",
+        "AppliesToMigrationTargetPlatform": "AzureSqlDatabase",
+        "Timestamp": "2023-11-27T21:45:11.2839748+00:00"
+    },
+    {
+        "ServerName": "LEGACYSQL2008",
+        "DatabaseName": "TEAM01_TenantDataDb",
+        "DatabaseRestoreFails": false,
+        "FeatureId": "CrossDatabaseReferences",
+        "IssueCategory": "Issue",
+        "ImpactedObjects": [
+        {
+            "Name": "[dbo].[sp_GetCountryTransactionSummary]",
+            "ObjectType": "StoredProcedure",
+            "ImpactDetail": "Object '[dbo].[sp_GetCountryTransactionSummary]' uses three-parts or four-parts cross databases reference: '[TEAM01_SharedMasterDataDB].[dbo].[Country]'.",
+            "DatabaseObjectType": "StoredProcedure"
+        },
+        {
+            "Name": "[dbo].[sp_GetUserTransactions]",
+            "ObjectType": "StoredProcedure",
+            "ImpactDetail": "Object '[dbo].[sp_GetUserTransactions]' uses three-parts or four-parts cross databases reference: '[TEAM01_LocalMasterDataDB].[dbo].[Users]'.",
+            "DatabaseObjectType": "StoredProcedure"
+        }
+        ],
+        "MoreInformation": "Check Azure SQL Database elastic database query (Currently in preview)",
+        "RuleMetadata": {
+        "Description": "Databases on this server use cross-database queries, which are not supported in Azure SQL Database.",
+        "Id": "Cross-database queries are not supported in Azure SQL Database",
+        "HelpLink": "https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-query-overview",
+        "Probes": [],
+        "Enabled": true,
+        "Level": 2,
+        "Tags": [],
+        "Message": "Azure SQL Database does not support cross-database queries. The following actions are recommended: 1. Migrate the dependent database(s) to Azure SQL Database and use 'Elastic Database Query' (Currently in preview) functionality to query across Azure SQL databases 2. Move the dependent datasets from other databases into the database that is being migrated 3. Migrate to Azure SQL Managed Instance 4. Migrate to SQL Server on Azure Virtual Machine.",
+        "Parameters": {}
+        },
+        "RuleScope": "Database",
+        "AppliesToMigrationTargetPlatform": "AzureSqlDatabase",
+        "Timestamp": "2023-11-27T21:45:11.2839786+00:00"
+    }
+    ],
+    "TargetReadinesses": {
+    "AzureSqlDatabase": {
+        "AppliesToMigrationTargetPlatform": "AzureSqlDatabase",
+        "State": "Online",
+        "RecommendationStatus": "NotReady",
+        "NoSelectionForMigration": false,
+        "NumOfBlockerIssues": 2,
+        "Errors": [],
+        "ServiceTiers": [
+        "GeneralPurpose",
+        "BusinessCritical",
+        "Hyperscale"
+        ]
+    },
+    "AzureSqlManagedInstance": {
+        "AppliesToMigrationTargetPlatform": "AzureSqlManagedInstance",
+        "State": "Online",
+        "RecommendationStatus": "Ready",
+        "NoSelectionForMigration": false,
+        "NumOfBlockerIssues": 0,
+        "Errors": [],
+        "ServiceTiers": [
+        "GeneralPurpose",
+        "BusinessCritical"
+        ]
+    }
+    },
+    "Properties": {
+    "Id": "bbaa98ab-c730-4dc2-9ba9-3083130202e0",
+    "ServerDatabaseId": "54",
+    "Name": "TEAM01_TenantDataDb",
+    "CompatibilityLevel": "CompatLevel100",
+    "Collation": "SQL_Latin1_General_CP1_CI_AS",
+    "DatabaseState": "Online",
+    "SizeMB": 182.0,
+    "DatabaseFileLocationDrive": "\u0000",
+    "DatabaseFiles": [
+        {
+        "LogicalName": "TenantDataDb_Data",
+        "PhysicalFullName": "C:\\Program Files\\Microsoft SQL Server\\MSSQL10_50.MSSQLSERVER\\MSSQL\\DATA\\TenantDataDb_TEAM1.mdf",
+        "FileType": "Rows",
+        "SizeMB": 61.0625,
+        "IsMemoryOptimizedDataOptionEnabled": false,
+        "FilegroupName": "PRIMARY",
+        "FilegroupType": "FG",
+        "HasErrors": false,
+        "ReportedErrors": {},
+        "ReportedExceptions": []
+        },
+        {
+        "LogicalName": "TenantDataDb_Log",
+        "PhysicalFullName": "C:\\Program Files\\Microsoft SQL Server\\MSSQL10_50.MSSQLSERVER\\MSSQL\\DATA\\TenantDataDb_TEAM1.ldf",
+        "FileType": "Log",
+        "SizeMB": 120.75,
+        "IsMemoryOptimizedDataOptionEnabled": false,
+        "FilegroupType": "NotApplicable",
+        "HasErrors": false,
+        "ReportedErrors": {},
+        "ReportedExceptions": []
+        }
+    ],
+    "IsServiceBrokerEnabled": false,
+    "IsCdcEnabled": false,
+    "IsReplicationEnabled": false,
+    "NumOfUserDefinedObjects": 5,
+    "TSqlScriptAnalysisTimeElapse": "00:00:00.2542202",
+    "IsFullRecoveryModelSelected": true,
+    "IsRdsAdmin": false,
+    "IsTdeEnabled": false,
+    "AGDatabaseInfo": {
+        "AGDbSyncSecondaryReplicaCount": 0,
+        "AGDbAsyncSecondaryReplicaCount": 0,
+        "AGDbReadAsyncSecondaryReplicaCount": 0
+    }
+    },
+    "Errors": [],
+    "Status": "Completed",
+    "FeatureDiscoveryTimeElapse": "00:00:00.2675456"
+}
+ 
