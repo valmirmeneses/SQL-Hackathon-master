@@ -313,7 +313,7 @@
     },
     "variables": {
         "deploymentName": "[concat('deployRequiredNetworkingResources_', uniqueString(resourceGroup().id))]",
-        "uniqueStorage": "[uniqueString(resourceGroup().name, resourceGroup().location)]",
+        "uniqueStorage": "[uniqueString(subscription().subscriptionId, resourceGroup().name, resourceGroup().location)]",
         "storageName": "[tolower(concat('sqlva', variables('uniqueStorage')))]"
     },
     "resources": [
