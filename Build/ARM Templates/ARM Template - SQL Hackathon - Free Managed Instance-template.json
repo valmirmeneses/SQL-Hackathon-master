@@ -4,7 +4,7 @@
     "parameters": {
         
         "adminUsername": {
-            "defaultValue": "DemoUser",
+            "value": "DemoUser",
             "type": "string",
             "metadata": {
                 "description": "Administrator user name for logging into the virtual machine and SQL MI."
@@ -19,7 +19,7 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
+            "value": "[resourceGroup().location]",
             "metadata": {
                 "description": "The location of the Managed Instance. Default is the location of the selected resource group."
             }
@@ -33,7 +33,6 @@
         },
         "deployInExistingSubnet": {
             "type": "bool",
-            "defaultValue": false,
             "value": true,
             "metadata": {
                 "description": "Determines whether the Managed Instance will be deployed in an existing subnet. Subnet parameters need to be valid if this is set."
@@ -62,7 +61,7 @@
         },
         "skuName": {
             "type": "string",
-            "defaultValue": "GP_Gen5",
+            "value": "GP_Gen5",
             "allowedValues": [
                 "GP_Gen4",
                 "GP_Gen5",
@@ -79,7 +78,7 @@
         },
         "skuEdition": {
             "type": "string",
-            "defaultValue": "GeneralPurpose",
+            "value": "GeneralPurpose",
             "allowedValues": [
                 "GeneralPurpose",
                 "BusinessCritical"
@@ -90,7 +89,7 @@
         },
         "hardwareFamily": {
             "type": "string",
-            "defaultValue": "Gen5",
+            "value": "Gen5",
             "allowedValues": [
                 "Gen4",
                 "Gen5",
@@ -103,7 +102,7 @@
         },
         "storageSizeInGB": {
             "type": "int",
-            "defaultValue": 256,
+            "value": 64,
             "minValue": 32,
             "metadata": {
                 "description": "Determines how much Storage size in GB to associate with instance. Increments of 32 GB allowed only."
@@ -111,7 +110,7 @@
         },
         "vCores": {
             "type": "int",
-            "defaultValue": 8,
+            "value": 8,
             "allowedValues": [
                 4,
                 6,
@@ -147,7 +146,7 @@
         },
         "hybridSecondaryUsage": {
             "type": "string",
-            "defaultValue": "Active",
+            "value": "Active",
             "allowedValues": [
                 "Active",
                 "Passive"
@@ -158,28 +157,28 @@
         },
         "dnsZonePartner": {
             "type": "string",
-            "defaultValue": "",
+            "value": "",
             "metadata": {
                 "description": "The resource id of another Managed Instance whose DNS zone this Managed Instance will share after creation."
             }
         },
         "collation": {
             "type": "string",
-            "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
+            "value": "SQL_Latin1_General_CP1_CI_AS",
             "metadata": {
                 "description": "Collation of the Managed Instance."
             }
         },
         "timezoneId": {
             "type": "string",
-            "defaultValue": "UTC",
+            "value": "UTC",
             "metadata": {
                 "description": "Id of the timezone. Allowed values are timezones supported by Windows."
             }
         },
         "proxyOverride": {
             "type": "string",
-            "defaultValue": "Proxy",
+            "value": "Proxy",
             "allowedValues": [
                 "Proxy",
                 "Redirect"
@@ -190,7 +189,6 @@
         },
         "publicDataEndpointEnabled": {
             "type": "bool",
-            "defaultValue": false,
             "value": true,
             "metadata": {
                 "description": "Determines whether public data endpoint will be enabled, required for clients outside of the connected virtual networks. Public endpoint will always default to Proxy connection mode."
@@ -211,7 +209,7 @@
         },
         "minimalTlsVersion": {
             "type": "string",
-            "defaultValue": "1.2",
+            "value": "1.2",
             "allowedValues": [
                 "1.0",
                 "1.1",
@@ -223,21 +221,21 @@
         },
         "administratorLogin": {
             "type": "string",
-            "defaultValue": "",
+            "value": "DemoUser",
             "metadata": {
                 "description": "The login of the Managed Instance admin."
             }
         },
         "administratorLoginPassword": {
             "type": "securestring",
-            "defaultValue": "",
+            "value": null,
             "metadata": {
                 "description": "The password of the Managed Instance admin."
             }
         },
         "administrators": {
             "type": "object",
-            "defaultValue": {}
+            "value": {}
         },
         "managedInstanceTags": {
             "type": "object",
@@ -248,7 +246,7 @@
         },
         "requestedBackupStorageRedundancy": {
             "type": "string",
-            "defaultValue": "Geo",
+            "value": "Geo",
             "allowedValues": [
                 "Geo",
                 "Zone",
@@ -261,29 +259,29 @@
         },
         "maintenanceConfigurationId": {
             "type": "string",
-            "defaultValue": "",
+            "value": "",
             "metadata": {
                 "description": "Maintenance configuration id assigned to the database. This configuration defines the period when the maintenance updates will occur."
             }
         },
         "zoneRedundant": {
             "type": "bool",
-            "defaultValue": false,
+            "value": false,
             "metadata": {
                 "description": "Determines whether zone redundancy will be enabled."
             }
         },
         "enableADS": {
             "type": "bool",
-            "defaultValue": false
+            "value": true
         },
         "enableVA": {
             "type": "bool",
-            "defaultValue": false
+            "value": true
         },
         "pricingModel": {
             "type": "string",
-            "defaultValue": "Regular",
+            "value": "Freemium",
             "allowedValues": [
                 "Regular",
                 "Freemium"
@@ -294,19 +292,23 @@
         },
         "identity": {
             "type": "object",
-            "defaultValue": {}
+            "value": {
+                "type": "SystemAssigned"
+            }
         },
         "primaryUserAssignedIdentityId": {
             "type": "string",
-            "defaultValue": ""
+            "value": ""
         },
         "federatedClientId": {
             "type": "string",
-            "defaultValue": ""
+            "value": ""
         },
         "servicePrincipal": {
             "type": "object",
-            "defaultValue": {}
+            "value": {
+                "type": "None"
+            }
         }
     },
     "variables": {
