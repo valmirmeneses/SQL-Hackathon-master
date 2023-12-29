@@ -259,7 +259,7 @@
         },
         "maintenanceConfigurationId": {
             "type": "string",
-            "value": "",
+            "value": "[concat('/subscriptions/',subscription().subscriptionId,'/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default)'",
             "metadata": {
                 "description": "Maintenance configuration id assigned to the database. This configuration defines the period when the maintenance updates will occur."
             }
