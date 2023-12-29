@@ -313,7 +313,7 @@
     },
     "variables": {
         "deploymentName": "[concat('deployRequiredNetworkingResources_', uniqueString(resourceGroup().id))]",
-        "uniqueStorage": "[uniqueString(subscription().subscriptionId, resourceGroup().name, resourceGroup().location)]",
+        "uniqueStorage": "[uniqueString(resourceGroup().name, resourceGroup().location)]",
         "storageName": "[tolower(concat('sqlva', variables('uniqueStorage')))]"
     },
     "resources": [
@@ -341,7 +341,7 @@
             "properties": {
                 "mode": "Incremental",
                 "expressionEvaluationOptions": {
-                    "scope": "inner"
+                    "scope": "Inner"
                 },
                 "parameters": {
                     "location": {
@@ -3332,7 +3332,7 @@
                 "name": "[parameters('skuName')]",
                 "tier": "[parameters('skuEdition')]"
             },
-            "tags": "[parameters('managedInstanceTags')]",
+            "tags": [],
             "dependsOn": [
                 "[variables('deploymentName')]"
             ],
