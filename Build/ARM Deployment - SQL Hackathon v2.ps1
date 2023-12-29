@@ -63,20 +63,20 @@ If ($TeamVMCount -gt 20)
 
 }
 
-$DefaultValue = "NorthEurope"
+$DefaultValue = "northeurope"
 if (($Location = Read-Host "Please enter the Location of the Resource Groups. (default value: $DefaultValue)") -eq '') {$Location = $DefaultValue}
 If (“NorthEurope”,”WestEurope”,”UKSouth”, "UKWest", "WestUS", "EastUS" -NotContains $Location  ) {Write-Warning "Unrecognised location. Setting to Default $DefaultValue" ; $Location = "NorthEurope"}
 
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "##################### IMPORTANT: MAKE A NOTE OF THE FOLLOWING USERNAME and PASSWORD ########################"
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "The username and password specified next, will be used to credentials to SQL, Managed Instance and any VM's"
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "############################################################################################################"
-
+$adminUsername = "DemoUser"
 $x = 4
 do
     {$x = $x - 1
     if ($x -lt 3){write-host "Not enough characters. Retries remaining: " $x};
     if ($x -le 0) {write-host "Existing build. Please check username and retry..."; Exit};
-    $adminUsername = Read-Host "Please enter an Admin username (more than 6 characters)"
+    $adminUsername = Read-Host "Please enter an Admin username (more than 6 characters) (default value: $adminUsername)"
     }
 while ($adminUsername.length -le 6)
 
@@ -115,7 +115,7 @@ if (!($notPresent)) {New-AzResourceGroup -Name $TeamRG -Location $Location}
 ###################################################################
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating Virtual Network................................................."
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Network%20-%20v2.json"
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "NetworkBuild" 
+#New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "NetworkBuild" 
 
 # Check if Vnet has been created
 Get-AzVirtualNetwork -Name "$SharedRG-vnet" -ResourceGroupName $SharedRG -ErrorVariable notPresent -ErrorAction SilentlyContinue
@@ -130,13 +130,13 @@ $StorageAccountKeys = Get-AzStorageAccountKey -ResourceGroupName $SharedRG -Name
 $Key0 = $StorageAccountKeys | Select-Object -First 1 -ExpandProperty Value
 $Context = New-AzStorageContext -StorageAccountName $StorageAccount -StorageAccountKey $Key0
 
-New-AzStorageContainer -Context $Context -Name migration 
-New-AzStorageContainer -Context $Context -Name auditlogs
+#New-AzStorageContainer -Context $Context -Name migration 
+#New-AzStorageContainer -Context $Context -Name auditlogs
 
 $storagePolicyName = “Migration-Policy”
 $expiryTime = (Get-Date).AddYears(1)
-New-AzStorageContainerStoredAccessPolicy -Container migration -Policy $storagePolicyName -Permission rwld -ExpiryTime $expiryTime -Context $Context -StartTime(Get-Date) 
-$SASUri = (New-AzStorageContainerSASToken -Name "migration" -FullUri -Policy $storagePolicyName -Context $Context)
+#New-AzStorageContainerStoredAccessPolicy -Container migration -Policy $storagePolicyName -Permission rwld -ExpiryTime $expiryTime -Context $Context -StartTime(Get-Date) 
+#$SASUri = (New-AzStorageContainerSASToken -Name "migration" -FullUri -Policy $storagePolicyName -Context $Context)
 
 $JsonSASURI = $SASUri | ConvertTo-Json
 
@@ -147,7 +147,16 @@ Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating legacySQL Se
 
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20LegacySQL-%20v2.json"
 #$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - LegacySQL- v2.json"
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -adminPassword $adminPassword -Name "LegacySQLBuild" -AsJob 
+#New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -adminPassword $adminPassword -Name "LegacySQLBuild" -AsJob 
+
+###################################################################
+# Setup Managed Instance and ADF with SSIS IR
+###################################################################
+Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi Managed Instance................................................."
+
+$TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Free%20Managed%20Instance-template.json"
+#$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
+New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -adminPassword $adminPassword -Name "ManagedInstanceBuild" -AsJob
 
 ###################################################################
 # Setup Data Migration Service, Gateway, Keyvault
@@ -155,12 +164,12 @@ New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $Templat
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating DMS, Datafactory, Keyvault, storage account shared resources.................................................."
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Shared%20-%20v2.json"
 
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "SharedServicesBuild" -AsJob 
+#New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -Name "SharedServicesBuild" -AsJob 
 
 # Setup KeyVault
 $Random = Get-Random -Maximum 99999
 $Keyvault = "sqlhack-keyvault-$Random"
-New-AzKeyVault -Name $Keyvault  -ResourceGroupName $SharedRG -Location $Location
+#New-AzKeyVault -Name $Keyvault  -ResourceGroupName $SharedRG -Location $Location
 
 Get-AzKeyVault -Name $Keyvault -ResourceGroupName $SharedRG -ErrorVariable notPresent -ErrorAction SilentlyContinue
 if ($notPresent) {Write-Warning "sqlhack-keyvault Failed to build. Please check and retry";return;}
@@ -172,16 +181,16 @@ Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating $TeamVMCount
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Jump%20Servers%20-%20v2.json"
 #$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Jump Servers - v2.json"
 
-New-AzResourceGroupDeployment -ResourceGroupName $TeamRG -TemplateUri $TemplateUri -Name "TeamVMBuild" -vmCount $TeamVMCount -SharedResourceGroup $SharedRG -SASURIKey $JsonSASURI -StorageAccount $StorageAccount -adminPassword $adminpassword -adminUsername $adminUsername -AsJob 
+#New-AzResourceGroupDeployment -ResourceGroupName $TeamRG -TemplateUri $TemplateUri -Name "TeamVMBuild" -vmCount $TeamVMCount -SharedResourceGroup $SharedRG -SASURIKey $JsonSASURI -StorageAccount $StorageAccount -adminPassword $adminpassword -adminUsername $adminUsername -AsJob 
 
 ###################################################################
 # Setup Managed Instance and ADF with SSIS IR
 ###################################################################
-Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi Managed Instance................................................."
+#Write-Host -BackgroundColor Black -ForegroundColor Yellow "Creating sqlhack-mi Managed Instance................................................."
 
 $TemplateUri = "https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/ARM%20Templates/ARM%20Template%20-%20SQL%20Hackathon%20-%20Free%20Managed%20Instance-template.json"
 #$TemplateUri = "C:\Users\vamenese\OneDrive - Microsoft\CSU\Hacks\SQL-Hackathon-master\SQL-Hackathon-master\Build\ARM Templates\ARM Template - SQL Hackathon - Free Managed Instance-template.json"
-New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -adminPassword $adminPassword -Name "ManagedInstanceBuild" -AsJob
+#New-AzResourceGroupDeployment -ResourceGroupName $SharedRG -TemplateUri $TemplateUri -location $location -adminPassword $adminPassword -Name "ManagedInstanceBuild" -AsJob
 
 Write-Host -BackgroundColor Black -ForegroundColor Yellow "Enviroment Build in progress. Please check RG deployments for errors."
 
