@@ -1,6 +1,6 @@
 ﻿param (
     [string]$AdminUsername,
-    [string]$AdminPassword
+    [SecureString]$AdminPassword
 )
 
 
