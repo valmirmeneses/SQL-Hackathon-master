@@ -34,7 +34,7 @@
         "managementSubnetName": "Management",
         "comments":"sqlCustomScriptFileName: ARM%20Deployment%20-%20SQL%20Build%20RC1.ps1",
         "sqlCustomScriptFileName": "ARM Deployment - SQL Build RC1.ps1",
-        "comments":"sqlCustomScriptUri : [concat('https://raw.githubusercontent.com/markjones-msft/SQL-Hackathon/master/Build/Powershell/', variables('sqlCustomScriptFileName'))]",
+        "comments":"sqlCustomScriptUri : [concat('https://raw.githubusercontent.com/valmirmeneses/SQL-Hackathon/master/Build/Powershell/', variables('sqlCustomScriptFileName'))]",
         "sqlCustomScriptUri": "[concat('C:\\Users\\vamenese\\OneDrive - Microsoft\\CSU\\Hacks\\SQL-Hackathon-master\\SQL-Hackathon-master\\Build\\ARM Templates\\', variables('sqlCustomScriptFileName'))]"
     },
     "resources": [
