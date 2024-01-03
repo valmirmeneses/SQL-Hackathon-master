@@ -3066,6 +3066,7 @@
                 "licenseType": "[variables('licenseType')]",
                 "hardwareFamily": "[variables('hardwareFamily')]",
                 "dnsZonePartner": "",
+                "pricingModel": "Freemium",
                 "collation": "SQL_Latin1_General_CP1_CI_AS",
                 "proxyOverride": "[parameters('proxyOverride')]",
                 "publicDataEndpointEnabled": "[parameters('publicDataEndpointEnabled')]",
