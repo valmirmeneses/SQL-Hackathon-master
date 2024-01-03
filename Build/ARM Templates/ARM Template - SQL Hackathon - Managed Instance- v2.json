@@ -3051,8 +3051,12 @@
                 "name": "[variables('skuName')]",
                 "tier": "[variables('skuEdition')]"
             },
+            "pricingModel": "[parameters('pricingModel')]",
+            "tags": {
+                "tag1": "Free"
+            },
             "name": "[variables('uniqueManagedInstanceName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2023-02-01-preview",
             "location": "[variables('location')]",
             "identity": {
                 "type": "SystemAssigned"
@@ -3074,7 +3078,84 @@
             },
             "dependsOn": [
                 "updateSubnetTemplate"
-            ]
+            ],
+            "resources": [
+                {
+                    "condition": "[equals(parameters('pricingModel'), 'Freemium')]",
+                    "type": "Microsoft.Sql/managedInstances/startStopSchedules",
+                    "apiVersion": "2023-02-01-preview",
+                    "name": "[concat(parameters('managedInstanceName'), '/default')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstanceName'))]"
+                    ],
+                    "properties": {
+                        "timezoneId": "[parameters('timezoneId')]",
+                        "scheduleList": [
+                            {
+                                "startDay": "Monday",
+                                "startTime": "09:00 AM",
+                                "stopDay": "Monday",
+                                "stopTime": "05:00 PM"
+                            },
+                            {
+                                "startDay": "Tuesday",
+                                "startTime": "09:00 AM",
+                                "stopDay": "Tuesday",
+                                "stopTime": "05:00 PM"
+                            },
+                            {
+                                "startDay": "Wednesday",
+                                "startTime": "09:00 AM",
+                                "stopDay": "Wednesday",
+                                "stopTime": "05:00 PM"
+                            },
+                            {
+                                "startDay": "Thursday",
+                                "startTime": "09:00 AM",
+                                "stopDay": "Thursday",
+                                "stopTime": "05:00 PM"
+                            },
+                            {
+                                "startDay": "Friday",
+                                "startTime": "09:00 AM",
+                                "stopDay": "Friday",
+                                "stopTime": "05:00 PM"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "condition": "[parameters('enableADS')]",
+                    "type": "advancedThreatProtectionSettings",
+                    "apiVersion": "2022-02-01-preview",
+                    "name": "Default",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstanceName'))]"
+                    ],
+                    "properties": {
+                        "state": "Enabled"
+                    }
+                },
+                {
+                    "condition": "[parameters('enableVA')]",
+                    "type": "vulnerabilityAssessments",
+                    "apiVersion": "2018-06-01-preview",
+                    "name": "Default",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/managedInstances/', parameters('managedInstanceName'))]",
+                        "[concat('Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+                        "[concat('Microsoft.Sql/managedInstances/', parameters('managedInstanceName'), '/advancedThreatProtectionSettings/Default')]"
+                    ],
+                    "properties": {
+                        "storageContainerPath": "[if(parameters('enableVA'), concat(reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))).primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
+                        "storageAccountAccessKey": "[if(parameters('enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
+                        "recurringScans": {
+                            "isEnabled": true,
+                            "emailSubscriptionAdmins": false
+                        }
+                    }
+                }
+            ],
         } ,
         {
             "name": "[variables('dataFactoryName')]",

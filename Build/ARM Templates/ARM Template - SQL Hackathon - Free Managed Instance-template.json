@@ -3331,7 +3331,9 @@
                 "name": "[parameters('skuName')]",
                 "tier": "[parameters('skuEdition')]"
             },
-            "tags": [],
+            "tags": {
+                "tag1": "Free"
+            },
             "dependsOn": [
                 "[variables('deploymentName')]"
             ],
