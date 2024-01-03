@@ -12,7 +12,6 @@
         },
         "adminPassword": {
             "type": "securestring",
-            "value": "Demo@pass1234567",
             "metadata": {
                 "description": "The password must be between 16 and 128 characters in length and must contain at least one number, one non-alphanumeric character, and one upper or lower case letter. Default value is Password.1234567890"
             }
@@ -26,7 +25,7 @@
         },
         "managedInstanceName": {
             "type": "string",
-            "value": "sqlhackmi",
+            "value": "sqlhackfreemi",
             "metadata": {
                 "description": "The name of the Managed Instance."
             }
@@ -110,7 +109,7 @@
         },
         "vCores": {
             "type": "int",
-            "value": 8,
+            "value": 4,
             "allowedValues": [
                 4,
                 6,
