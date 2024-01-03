@@ -1,0 +1,207 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "securestring"
+        },
+        "managedInstances_free_sql_mi_4200945_name": {
+            "defaultValue": "free-sql-mi-4200945",
+            "type": "string"
+        },
+        "virtualNetworks_SQLHACK_SHARED_vnet_externalid": {
+            "defaultValue": "/subscriptions/1479657d-52da-420f-8add-add930152216/resourceGroups/SQLHACK-SHARED/providers/Microsoft.Network/virtualNetworks/SQLHACK-SHARED-vnet",
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/managedInstances",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[parameters('managedInstances_free_sql_mi_4200945_name')]",
+            "location": "northeurope",
+            "tags": {
+                "pricingModel": "Freemium"
+            },
+            "sku": {
+                "name": "GP_Gen5",
+                "tier": "GeneralPurpose",
+                "family": "Gen5",
+                "capacity": 4
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "isGeneralPurposeV2": false,
+                "administratorLogin": "DemoUser",
+                "subnetId": "[concat(parameters('virtualNetworks_SQLHACK_SHARED_vnet_externalid'), '/subnets/ManagedInstance')]",
+                "licenseType": "LicenseIncluded",
+                "hybridSecondaryUsage": "Active",
+                "vCores": 4,
+                "storageSizeInGB": 64,
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "publicDataEndpointEnabled": true,
+                "proxyOverride": "Proxy",
+                "timezoneId": "UTC",
+                "maintenanceConfigurationId": "/subscriptions/1479657d-52da-420f-8add-add930152216/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "minimalTlsVersion": "1.2",
+                "requestedBackupStorageRedundancy": "Geo",
+                "zoneRedundant": false,
+                "pricingModel": "Freemium",
+                "databaseFormat": "SQLServer2022"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/advancedThreatProtectionSettings",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/dtc",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "dtcEnabled": false,
+                "securitySettings": {
+                    "transactionManagerCommunicationSettings": {
+                        "allowInboundEnabled": true,
+                        "allowOutboundEnabled": true,
+                        "authentication": "NoAuth"
+                    },
+                    "xaTransactionsEnabled": true,
+                    "snaLu6point2TransactionsEnabled": true,
+                    "xaTransactionsDefaultTimeout": 0,
+                    "xaTransactionsMaximumTimeout": 0
+                },
+                "externalDnsSuffixSearchList": [
+                    "fwv5fnpsd0kk.database.windows.net"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/encryptionProtector",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged",
+                "autoRotationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/keys",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/securityAlertPolicies",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/serverConfigurationOptions",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/allowPolybaseExport')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "serverConfigurationOptionValue": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/startStopSchedules",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "timeZoneId": "UTC",
+                "scheduleList": [
+                    {
+                        "startDay": "Wednesday",
+                        "startTime": "09:00",
+                        "stopDay": "Wednesday",
+                        "stopTime": "17:00"
+                    },
+                    {
+                        "startDay": "Thursday",
+                        "startTime": "09:00",
+                        "stopDay": "Thursday",
+                        "stopTime": "17:00"
+                    },
+                    {
+                        "startDay": "Friday",
+                        "startTime": "09:00",
+                        "stopDay": "Friday",
+                        "stopTime": "17:00"
+                    },
+                    {
+                        "startDay": "Monday",
+                        "startTime": "09:00",
+                        "stopDay": "Monday",
+                        "stopTime": "17:00"
+                    },
+                    {
+                        "startDay": "Tuesday",
+                        "startTime": "09:00",
+                        "stopDay": "Tuesday",
+                        "stopTime": "17:00"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Sql/managedInstances/vulnerabilityAssessments",
+            "apiVersion": "2023-05-01-preview",
+            "name": "[concat(parameters('managedInstances_free_sql_mi_4200945_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/managedInstances', parameters('managedInstances_free_sql_mi_4200945_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        }
+    ]
+}
