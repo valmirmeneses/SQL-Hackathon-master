@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedInstanceName": {
-            "defaultValue": "sqlhackmi",
+            "defaultValue": "sqlhackmifree",
             "type": "string",
             "maxLength": 13,
             "metadata": {
@@ -3076,6 +3076,9 @@
                 "publicDataEndpointEnabled": "[parameters('publicDataEndpointEnabled')]",
                 "timezoneId": "[variables('timezoneId')]"
             },
+            "tags": {
+                "tag1": "Free"
+            },
             "dependsOn": [
                 "updateSubnetTemplate"
             ],
@@ -3155,7 +3158,7 @@
                         }
                     }
                 }
-            ],
+            ]
         } ,
         {
             "name": "[variables('dataFactoryName')]",
